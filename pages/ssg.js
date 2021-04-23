@@ -19,8 +19,6 @@ function StaticSide(props) {
             </div>
         )
     })
-
-
 }
 
 export const getStaticProps = async () => {
