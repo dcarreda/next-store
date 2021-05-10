@@ -3,6 +3,7 @@ import matter from 'gray-matter'
 import Link from 'next/link'
 import styled from "styled-components"
 import UnstyledLink from '../components/styled/UnstyledLink'
+import useCart from '../hooks/useCart'
 
 const Container = styled.div`
     background:white;
@@ -29,24 +30,34 @@ const Price = styled.span`
     font-size: 2rem;
 `
 
-const renderProduct = (product) => {
+const renderProduct = (product, addItemToCart) => {
+
+    const handleClick = (e) => {
+        e.stopPropagation();
+        addItemToCart(product);
+    }
+
     return (
-        <Link href={product.slug}>
+        <Link key={product.id} href={product.slug}>
             <UnstyledLink>
                 <Container>
                     <h1>{product.name}</h1>
                     <p>{product.description}</p>
+                    <button onClick={handleClick}>Add to cart </button>
+
                     <Price>{product.price}€</Price>
                 </Container >
             </UnstyledLink>
-        </Link>
+        </Link >
 
     )
 }
 const HomePage = (props) => {
+    const { cart, addItemToCart } = useCart(); //destructure the return (to be possible to use the hook)
+
     return (
         <ProductsContainer>
-            {props.products.map((renderProduct))
+            {props.products.map((product => renderProduct(product, addItemToCart)))
             }
         </ProductsContainer>
     )

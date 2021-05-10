@@ -1,6 +1,8 @@
 import styled from "styled-components"
 import { Normalize } from "styled-normalize"
 import Navbar from "../components/Navbar"
+import CartProvider from "../context/Cart"
+import Cart from "../components/Cart"
 
 const Container = styled.div`
     background: #0cebeb;  /* fallback for old browsers */
@@ -19,14 +21,18 @@ const Page = styled.div`
 
 const MyApp = ({ Component, pageProps }) => {
     return (
-        <Container>
-            <Normalize />
-            <Navbar />
-            <Page>
-                <Component {...pageProps} />
-                <footer>Footer</footer>
-            </Page>
-        </Container>
+        <CartProvider>
+            <Container>
+                <Normalize />
+                <Navbar />
+                <Page>
+                    <Component {...pageProps} />
+                    <footer>Footer</footer>
+                </Page>
+            </Container>
+            <Cart />
+        </CartProvider>
+
     );
 };
 
