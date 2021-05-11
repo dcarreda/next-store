@@ -1,11 +1,7 @@
 import fs from 'fs'; //filesystem package, to read the md files
 import matter from 'gray-matter'
 import styled from "styled-components"
-
-const Container = styled.div`
-    background: white;
-    padding: 2rem 1rem;
-`
+import Page from "../../components/styled/Page"
 
 const Title = styled.div`
     display: flex;
@@ -24,9 +20,10 @@ const Price = styled.span`
     border-radius: 5px;
 `
 
+
 const Product = ({ product: { data, content } }) => {
     return (
-        <Container>
+        <Page>
             <Title>
                 <h1>{data.name}</h1>
                 <SubTitle>{data.description}</SubTitle>
@@ -35,7 +32,7 @@ const Product = ({ product: { data, content } }) => {
             <Price>{data.price}</Price>
             <h5>{content}</h5>
 
-        </Container>
+        </Page>
     )
 };
 

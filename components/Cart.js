@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { AiOutlineClose } from "react-icons/ai"
 import useCart from "../hooks/useCart"
+import { useRouter } from "next/router"
 
 const Container = styled.div`
     position: fixed;
@@ -69,13 +70,21 @@ const Button = styled.button`
 
 `
 
+
+
 function Cart() {
-    const { cart, isOpen, openCart, closeCart } = useCart();
+    const { cart, isOpen, openCart, closeCart, total } = useCart();
+    const router = useRouter();
+
+    const navigateToCheckout = () => {
+        closeCart();
+        router.push("/checkout");
+    }
 
     const handleCloseCart = () => {
         closeCart();
     }
-    var total = 0;
+
     return (
         <Container isOpen={isOpen}>
             <XContainer>
@@ -83,25 +92,32 @@ function Cart() {
             </XContainer>
             <ContentContainer>
                 <Title>Cart</Title>
-                <ItemList>
-                    {cart.map(i => {
-                        total = i.price * i.qty;
+                {cart.length > 0 ? (
+                    <>
+                        <ItemList>
+                            {cart.map(i => {
 
-                        return (
+                                return (
 
-                            <Item>
-                                <span>{i.qty}x{i.name}</span>
-                                <span>{i.price}€</span>
+                                    <Item>
+                                        <span>{i.qty}x{i.name}</span>
+                                        <span>{i.price}€</span>
 
-                            </Item>
-                        )
-                    })}
-                </ItemList>
-                <Total>
-                    <span>Total</span>
-                    <span>{total}</span>
-                </Total>
-                <Button>Checkout</Button>
+                                    </Item>
+                                )
+                            })}
+                        </ItemList>
+                        <Total>
+                            <span>Total</span>
+                            <span>{total}</span>
+                        </Total>
+                        <Button onClick={navigateToCheckout}>Checkout</Button>
+                    </>
+                ) : (
+                        <p>Cart is empty</p>
+                    )
+                }
+
 
             </ContentContainer>
         </Container>

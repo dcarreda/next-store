@@ -10,20 +10,38 @@ const Cart = ({ children }) => {
     const getInitialCart = () => JSON.parse(localStorage.getItem("cart"))
     const [cart, setCart] = useState([]);
 
+
     const [isOpen, setIsOpen] = useState(false);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         const initialCart = getInitialCart()
         if (initialCart) {
             setCart(initialCart);
         }
+
     }, [])
 
     useEffect(() => {
         //write to local storage
         localStorage.setItem('cart', JSON.stringify(cart))
+        let newTotal = 0;
+
+        cart.forEach((item) => (newTotal += item.price * item.qty))
+        setTotal(newTotal)
 
     }, [cart])
+
+    const clearCart = () => {
+        localStorage.removeItem("cart");
+        setCart([]);
+    }
+
+    const isEmpty = () => {
+        if (cart.length === 0)
+            return true;
+        else return false;
+    }
 
     const openCart = () => {
         setIsOpen(true)
@@ -59,6 +77,9 @@ const Cart = ({ children }) => {
         openCart,
         closeCart,
         isOpen,
+        isEmpty,
+        total,
+        clearCart
     }
     return (
         <ContextCart.Provider value={exposed}>
