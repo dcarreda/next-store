@@ -2,6 +2,7 @@ import Page from "../components/styled/Page"
 import useCart from "../hooks/useCart"
 import styled from "styled-components"
 import axios from "axios"
+import { loadStripe } from "@stripe/stripe-js"
 
 const ItemList = styled.ul`
     padding-left: 0;
@@ -43,7 +44,10 @@ function checkout() {
             id,
             qty,
         }))
+        console.log(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY)
+        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY)
         const { data } = await axios.post(url, { newCart });
+        await stripe.redirectToCheckout({ sessionId: data.id })
 
     }
 
